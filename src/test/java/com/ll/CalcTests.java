@@ -29,4 +29,18 @@ public class CalcTests {
     void t4() {
         assertThat(Calc.run("1000 + 280")).isEqualTo(1280);
     }
+
+    @Test
+    @DisplayName("2 - 1 == 1")
+    void t5() {
+        assertThat(Calc.run("2 - 1")).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("3 - 1 == 2")
+    void t6() {
+        assertThat(Calc.run("3 - 1")).isEqualTo(2);
+    }
+
+
 }
