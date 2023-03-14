@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 public class Calc {
     public static int run(String exp) {
+        exp = exp.trim();
         exp = stripOuterBrackets(exp);
 
         // 단일항이 입력되면 바로 리턴
@@ -12,10 +13,33 @@ public class Calc {
 
         boolean needToMulti = exp.contains(" * ");
         boolean needToPlus = exp.contains(" + ") || exp.contains(" - ");
-
         boolean needToCompound = needToMulti && needToPlus;
+        boolean needToSplit =  exp.contains("(") || exp.contains(")");
 
-        if ( needToCompound ) {
+        if ( needToSplit ) {
+            int bracketsCount = 0;
+            int splitPointIndex = -1;
+
+            for ( int i = 0; i < exp.length(); i++ ) {
+                if ( exp.charAt(i) == '(' ) {
+                    bracketsCount++;
+                }
+                else if ( exp.charAt(i) == ')' ) {
+                    bracketsCount--;
+                }
+
+                if ( bracketsCount == 0 ) {
+                    splitPointIndex = i;
+                    break;
+                }
+            }
+
+            String firstExp = exp.substring(0, splitPointIndex + 1);
+            String secondExp = exp.substring(splitPointIndex + 4);
+
+            return Calc.run(firstExp) + Calc.run(secondExp);
+        }
+        else if ( needToCompound ) {
             String[] bits = exp.split(" \\+ ");
 
             String newExp = Arrays.stream(bits)
@@ -54,10 +78,14 @@ public class Calc {
     }
 
     private static String stripOuterBrackets(String exp) {
-        if ( exp.charAt(0) == '(' && exp.charAt(exp.length() - 1) == ')' ) {
-            exp = exp.substring(1, exp.length() - 1);
+        int outerBracketsCount = 0;
+
+        while ( exp.charAt(outerBracketsCount) == '(' && exp.charAt(exp.length() - 1 - outerBracketsCount) == ')' ) {
+            outerBracketsCount++;
         }
 
-        return exp;
+        if ( outerBracketsCount == 0 ) return exp;
+
+        return exp.substring(outerBracketsCount, exp.length() - outerBracketsCount);
     }
 }
