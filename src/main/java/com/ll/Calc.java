@@ -5,9 +5,7 @@ import java.util.stream.Collectors;
 
 public class Calc {
     public static int run(String exp) {
-        exp = stripOuterBrackets(String exp) {
-
-        }
+        exp = stripOuterBrackets(exp);
 
         // 단일항이 입력되면 바로 리턴
         if ( !exp.contains(" ") ) return Integer.parseInt(exp);
